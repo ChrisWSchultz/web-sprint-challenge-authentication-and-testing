@@ -6,7 +6,7 @@ const User = require('./auth-model');
 
 const {validateUserData, userExists} = require('./auth-middleware');
 
-router.post('/register', validateUserData(), userExists(), async (request, response, next) => {
+router.post('/register', validateUserData(), userExists(), async (request, response) => {
     try {
         if(request.extantUser) {
             return response.status(400).json("username taken");
@@ -21,7 +21,8 @@ router.post('/register', validateUserData(), userExists(), async (request, respo
             return response.status(201).json(user);
         }
     } catch (error) {
-        next(error);
+        console.log(error);
+        return response.status(500).json({'message': 'an error occurred'});
     }
     /*
       IMPLEMENT
@@ -49,7 +50,7 @@ router.post('/register', validateUserData(), userExists(), async (request, respo
     */
 });
 
-router.post('/login', validateUserData(), userExists(), async (request, response, next) => {
+router.post('/login', validateUserData(), userExists(), async (request, response) => {
     try {
         if(request.extantUser) {
             let validPassword = bcrypt.compare(request.extantUser.password, request.userData.password);
@@ -57,6 +58,7 @@ router.post('/login', validateUserData(), userExists(), async (request, response
             if(validPassword) {
                 const token = jwt.sign({
                     userId: request.extantUser.id,
+                    username: request.extantUser.username
                 }, process.env.JWT_SECRET);
 
                 response.cookie("token", token);
@@ -72,7 +74,8 @@ router.post('/login', validateUserData(), userExists(), async (request, response
             return response.status(400).json("invalid credentials");
         }
     } catch (error) {
-        next(error);
+        console.log(error);
+        return response.status(500).json({'message': 'an error occurred'});
     }
     /*
       IMPLEMENT

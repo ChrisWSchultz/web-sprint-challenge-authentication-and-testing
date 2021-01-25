@@ -13,10 +13,11 @@ const validateUserData = () => {
 
                 next();
             } else {
-                return response.status(400).json("username and password required");
+                return response.status(400).json('username and password required');
             }
         } catch (error) {
-            next(error);
+            console.log(error);
+            return response.status(500).json({'message': 'an error occurred'});
         }
     };
 };
@@ -35,7 +36,8 @@ const userExists = () => {
                 next();
             }
         } catch (error) {
-            next(error);
+            console.log(error);
+            return response.status(500).json({'message': 'an error occurred'});
         }
     };
 };
