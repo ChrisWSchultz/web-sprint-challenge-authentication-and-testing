@@ -14,9 +14,10 @@ describe('auth/register', () => {
     it('register new user', async () => {
         const response = await supertest(server)
             .post('/api/auth/register')
-            .send({"username": "scott", "password": "12345"});
+            .send({'username': 'scott', 'password': '12345'});
         expect(response.statusCode).toBe(201);
         expect(response.type).toBe('application/json');
+        expect(response.body.username).toBe('scott');
     });
 
     it('returns error if username taken', async () => {
@@ -34,9 +35,10 @@ describe('auth/login', () => {
     it('returns token on successful login', async () => {
         const response = await supertest(server)
             .post('/api/auth/login')
-            .send({"username": "kirk", "password": "12345"});
+            .send({'username': 'kirk', 'password': '12345'});
         expect(response.statusCode).toBe(200);
         expect(response.type).toBe('application/json');
+        expect(response.body.message).toBe('Welcome kirk')
     });
 
     it('returns error if username missing', async () => {
