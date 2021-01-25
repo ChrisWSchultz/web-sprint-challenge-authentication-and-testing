@@ -123,3 +123,5 @@ dist
 
 # Test db
 test.db3
+
+.idea
